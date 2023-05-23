@@ -3,6 +3,7 @@ import { prisma } from './../lib/prisma'
 interface TaskProps {
   title: string
   status: string
+  id?: string
 }
 
 export async function getAllTasks() {
@@ -28,4 +29,13 @@ export async function deleteTaskDatabase(id: string, reply: FastifyReply) {
   })
 
   return reply.status(202).send({ message: 'delete success' })
+}
+
+export async function updateTaskDatabase({ title, status, id }: TaskProps) {
+  const updatedTask = await prisma.tasks.update({
+    where: { id },
+    data: { title, status },
+  })
+
+  return updatedTask
 }
